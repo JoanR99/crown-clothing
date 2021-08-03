@@ -6,26 +6,35 @@ import { fetchCollectionsStart } from '../../redux/shop/shop.actions';
 
 import Spinner from '../../components/spinner/spinner.component';
 
-const CollectionOverview = lazy(() =>
-	import('../../components/collection-overview/collection-overview.container')
-);
-const CollectionPage = lazy(() => import('../collection/collection.container'));
+import { ShopPageContainer } from './shop.styles';
 
-const ShopPage = ({ fetchCollectionsStart, match }) => {
+const CollectionsOverviewContainer = lazy(() =>
+	import('../../components/collections-overview/collections-overview.container')
+);
+
+const CollectionPageContainer = lazy(() =>
+	import('../collection/collection.container')
+);
+
+export const ShopPage = ({ fetchCollectionsStart, match }) => {
 	useEffect(() => {
 		fetchCollectionsStart();
 	}, [fetchCollectionsStart]);
 
 	return (
-		<div className="shop-page">
+		<ShopPageContainer>
 			<Suspense fallback={<Spinner />}>
-				<Route exact path={`${match.path}`} component={CollectionOverview} />
+				<Route
+					exact
+					path={`${match.path}`}
+					component={CollectionsOverviewContainer}
+				/>
 				<Route
 					path={`${match.path}/:collectionId`}
-					component={CollectionPage}
+					component={CollectionPageContainer}
 				/>
 			</Suspense>
-		</div>
+		</ShopPageContainer>
 	);
 };
 
